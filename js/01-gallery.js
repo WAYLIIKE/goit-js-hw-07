@@ -32,24 +32,19 @@ function handleLink(event) {
     return;
   }
 
-  //Finding clicked photo
-  const currentPhoto = event.target.closest(".gallery__image");
-  //Finding clicked photo value of data attribute
-  const galleryElement = currentPhoto.dataset.source;
-  //Getting current photo object
-  const photo = galleryItems.find(
-    ({ original }) => galleryElement === original
-  );
-
-  const instance = basicLightbox.create(`
-          <img src="${photo.original}" alt="${photo.description}">
-    `);
-
-  instance.show();
-
-  galleryContainer.addEventListener("keydown", (event) => {
-    if (event.code === "Escape") {
-      instance.close();
+  const instance = basicLightbox.create(
+    `
+          <img src="${event.target.dataset.source}">
+    `,
+    {
+      onShow: (instance) => {
+        galleryContainer.addEventListener("keydown", (event) => {
+          if (event.code === "Escape") {
+            instance.close();
+          }
+        });
+      },
     }
-  });
+  );
+  instance.show();
 }
